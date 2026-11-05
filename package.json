@@ -1,0 +1,27 @@
+{
+  "name": "s2-focus",
+  "version": "1.0.0",
+  "description": "S2 (FOCUS): Failure-routed · Offspring-potential · Coupled type×intensity UCB · Unsparing reject · Smoke-then-score",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "demo": "node src/demo/run.js",
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "ahc",
+    "search",
+    "ucb",
+    "focus",
+    "organon",
+    "s2"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
