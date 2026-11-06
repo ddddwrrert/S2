@@ -1,0 +1,5 @@
+export const STATE_FILE = 's2/state.json'
+export const UCB_FILE = 's2/ucb.json'
+export const MEMORY_LOG = 's2/memory.jsonl'
+export const MUTATION_LOG = 's2/mutations.jsonl'
+export const LINEAGE_FILE = 's2/lineage.json'

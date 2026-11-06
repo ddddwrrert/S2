@@ -1,12 +1,28 @@
 {
   "name": "s2-focus",
-  "version": "1.0.0",
-  "description": "S2 (FOCUS): Failure-routed · Offspring-potential · Coupled type×intensity UCB · Unsparing reject · Smoke-then-score",
+  "version": "2.0.0",
+  "description": "S2 (FOCUS) — evolve-mountable AHC search: failure-routed · offspring-potential · type×intensity UCB · unsparing reject · smoke-then-score",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js",
+    "./plugin": "./src/plugin.js",
+    "./install": "./src/install.js",
     "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "docs",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": [
+        "./cordis.patch.yml"
+      ]
+    }
   },
   "scripts": {
     "demo": "node src/demo/run.js",
@@ -14,13 +30,22 @@
   },
   "keywords": [
     "ahc",
-    "search",
-    "ucb",
+    "dsh",
+    "dsh-plugin",
+    "cordis",
+    "evolve",
     "focus",
-    "organon",
     "s2"
   ],
   "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=18"
   }

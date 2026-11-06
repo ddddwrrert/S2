@@ -1,60 +1,49 @@
-# S2 — FOCUS
+# S2 — FOCUS（可挂 evolve）
 
-**S2** is a standalone AHC inner-loop search strategy (independent of S1).
+**FOCUS** = Failure-routed · Offspring-potential · Coupled type×intensity UCB · Unsparing reject · Smoke-then-score
 
-**FOCUS** = **F**ailure-routed · **O**ffspring-potential parents · **C**oupled (type×intensity) UCB · **U**nsparing reject · **S**moke-then-score
+v2：**纯策略库** + **嵌进宿主 evolve 五槽**（不改密封 evaluate）。
 
-Same official `evaluate` budget **B** as a bare baseline. Smoke tests do **not** consume B. Paired real probes spend **2B** only on stall.
+## 挂到 evolve
 
-## Install
+宿主需已提供 `evolve`（`dsh-evolve-a2` / `dsh-evolve-loop`）。
+
+```js
+import { installS2Providers } from 's2-focus'
+
+const { installed, dispose } = installS2Providers(evolve)
+// loop=s2-loop · select=s2-select · mutate=s2-mutate · survive=s2-survive
+```
+
+或装 DSH bundle（`cordis.patch.yml` → 插件 `s2-focus`）。
+
+`evolve_run` 路径：
+
+`s2-select`（后代潜力）→ `s2-mutate`（失败路由 + type×intensity UCB）→ **官方 evaluate** → 严格晋升 / stall 时成对真探针（2B）→ `s2-survive`
+
+## 纯策略库
+
+```js
+import { runFocus } from 's2-focus'
+await runFocus({ B: 100, seed, mutate, evaluate })
+```
 
 ```bash
-npm install
 npm test
 npm run demo
 ```
 
-## Use
+## 槽位
 
-```js
-import { runFocus } from 's2-focus'
-
-const result = await runFocus({
-  B: 100,
-  seed: { id: 'seed', payload: codeOrState, score: 0 },
-  async mutate(parent, instr, arm) {
-    // arm like "neighborhood:Lite"
-    return { id: 'child', payload: await llmEdit(parent.payload, instr) }
-  },
-  async evaluate(cand) {
-    // number or { score, meta: { crash, timeout, ... } }
-    return officialJudge(cand.payload)
-  },
-  // optional tax=0 smoke; return false to skip official eval (no B burn)
-  async smoke(cand) {
-    return syntaxOk(cand.payload)
-  },
-})
-```
-
-## vs S1
-
-| | S1 (IUBC) | **S2 (FOCUS)** |
-|--|-----------|----------------|
-| Arms | edit type | **type × intensity** |
-| Parent | sticky + archive | sticky + **offspring potential** |
-| Routing | phase gates | **failure fingerprint → family** then UCB |
-| Promote | beat I / archive | **strict reject + preserve** |
-| Stall | raise exploration | **paired real probe** (2B) |
-| Pre-check | none | **smoke (0B)** |
+| Slot | Provider | 行为 |
+|------|----------|------|
+| select | `s2-select` | sticky + offspring-potential |
+| mutate | `s2-mutate` | 失败指纹路由 + `(t,i)` UCB |
+| loop | `s2-loop` | 日常 1B；stall 配对 2B；拒无效 |
+| survive | `s2-survive` | 偏正分 top-k |
+| evaluate | （宿主） | **不碰** |
 
 ## Docs
 
 - [`docs/SPEC.md`](docs/SPEC.md)
 - [`docs/MEMORY.md`](docs/MEMORY.md)
-
-## Not in scope
-
-- Evolution / held-out outer loops
-- Changing the sealed evaluator
-- Default every-step paired evals

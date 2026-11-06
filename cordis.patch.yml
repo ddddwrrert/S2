@@ -1,0 +1,4 @@
+# Overlay: mount S2 FOCUS providers onto an existing evolve host.
+- insert:
+    - id: s2-focus
+      name: s2-focus

@@ -1,7 +1,8 @@
 /**
- * S2 — FOCUS search strategy
- * Failure-routed · Offspring-potential · Coupled type×intensity UCB ·
- * Unsparing reject · Smoke-then-score
+ * S2 — FOCUS
+ *
+ * 1) Pure: `runFocus({ B, seed, mutate, evaluate })`
+ * 2) Evolve mount: `installS2Providers(evolve)` / Cordis plugin `s2-focus`
  */
 
 export * as constants from './constants.js'
@@ -35,3 +36,11 @@ export { createMemory } from './memory.js'
 export { selectParentAndArm, selectPairedArm } from './select.js'
 export { survive } from './survive.js'
 export { runFocus } from './loop.js'
+
+export { installS2Providers } from './install.js'
+export { default as s2Select } from './providers/s2-select.js'
+export { default as s2Mutate } from './providers/s2-mutate.js'
+export { default as s2Loop } from './providers/s2-loop.js'
+export { default as s2Survive } from './providers/s2-survive.js'
+
+export { name, inject, apply } from './plugin.js'
